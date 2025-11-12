@@ -1,0 +1,19 @@
+  {
+    "topic": "Power Rule",
+    "questions":
+    [
+      {
+        "id_number": 1,
+        "difficulty": "easy",
+        "prompt": "Solve d/dx 3x^2",
+        "answer": "6x"
+      },
+
+      {
+        "id_number": 2,
+        "difficulty": "easy",
+        "prompt": "Solve d/dx 0.5x^10",
+        "answer": "5x^9"
+      }
+    ]
+  }

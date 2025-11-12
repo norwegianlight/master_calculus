@@ -1,0 +1,19 @@
+  {
+    "topic": "Chain Rule",
+    "questions":
+    [
+      {
+        "id_number": 1,
+        "difficulty": "easy",
+        "prompt": "Solve d/dx (2x^3 - 7x)^2",
+        "answer": ""
+      },
+
+      {
+        "id_number": 2,
+        "difficulty": "easy",
+        "prompt": "Solve d/dx ",
+        "answer": ""
+      }
+    ]
+  }
