@@ -1,66 +1,81 @@
-import string
-
-from practice.practice_module import practice_menu
 from profile.profile_creator import create_profile
-from profile.profile_manager import profile_menu, profile_selector
-from utilities.utilities import get_integer_input, check_profiles_exist, get_user_name
+from profile.profile_manager import profile_selector, load_profile, display_profile_menu
+from utilities.utilities import get_integer_input, get_profile_path, check_profiles_exist, display_profiles
 
-
-##################################################################
 
 ##
 ##
-def handle_main_menu_choice(choice: int) -> None:
+def display_stats(profile: dict) -> None:
+    print(f"{profile['name']}'s stats:")
+    print(f"Profile created: {profile['date_created']}")
+    print(f"Quizzes completed: {profile['quizzes_completed']}")
+    print(f"Average correct answers: {profile['avg_correct_answers']}")
+    print(f"Average quiz time: {profile['avg_quiz_time']}")
+    print(f"Best quiz time: {profile['best_quiz_time']}")
+
+
+##
+##
+def handle_main_menu_choice(choice: int, profile: dict) -> None:
     match choice:
         case 1:
-            #practice_menu()
-            print("Under construction")
-            main_menu()
+            print("meep")
         case 2:
-            #quiz_menu()
-            print("Under construction")
-            main_menu()
+            print("moop")
         case 3:
-            #user_statistics_menu()
-            print("Under construction")
-            main_menu()
+            display_stats(profile)
         case 4:
-            profile_menu()
+            display_profile_menu()
         case 0:
-            print("Exiting, goodbye!")
-            exit()
+            print("Exiting program, goodbye!")
+            exit(0)
         case _:
             print("Invalid choice")
 
 
-## main_menu()
-## prints out
-def main_menu() -> None:
-    name = get_user_name()
+## main_menu
+## returns none
+## display main menu
+def main_menu(profile: dict) -> None:
     print("==========================")
-    print(f"Welcome to Master Calculus, {name}")
+    print(f"Welcome to Master Calculus, " + profile["name"] + "!")
     print("==========================")
-    #print("1) Learn")
+    print("==========================")
     print("1) Practice")
     print("2) Quiz")
-    print("3) Stats")
+    print("3) Statistics")
     print("4) Manage profiles")
     print("0) Exit")
     choice = get_integer_input("Enter your choice: ")
-    handle_main_menu_choice(choice)
+    handle_main_menu_choice(choice, profile)
 
 
-## main()
-## goes to the profile selector or profile creator if there are no profiles found
-def main() -> None:
-    file_exist = check_profiles_exist()
+##
+##
+def new_user() -> dict:
+    username = create_profile()
+    return load_profile(get_profile_path(username))
 
-    if file_exist:
-        profile_selector()
+
+##
+##
+def startup_wizard() -> dict:
+    if not check_profiles_exist():
+        return new_user()
     else:
-        create_profile()
+        username = profile_selector()
+        return load_profile(username)
 
-    main_menu()
+
+
+## main
+## returns none
+##
+def main() -> None:
+    profile = startup_wizard()
+
+    while True:
+        main_menu(profile)
 
 
 if __name__ == '__main__':
