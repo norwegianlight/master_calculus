@@ -12,16 +12,6 @@ def get_integer_input(prompt: str) -> int:
         return get_integer_input(prompt)
 
 
-##
-##
-def get_number_of_profiles() -> int:
-    iterator = 0
-    for file_name in os.listdir("./profile"):
-        if file_name.endswith(".json"):
-            iterator += 1
-    return iterator
-
-
 ## check_profiles_exist
 ## returns bool
 ##
@@ -35,33 +25,29 @@ def check_profiles_exist() -> bool:
 
 ##
 ##
-def get_username_from_file(username: str) -> str:
-    return username[:-5]
+def get_profile_list() -> list:
+    profiles = []
+    for file_name in os.listdir("./profile"):
+        if file_name.endswith(".json"):
+            profiles.append(file_name)
+    return profiles
 
 
 ##
 ##
-TODO: ("Figure out how to get username whenever," \
-       "maybe not whenever but for starting the program")
-def get_username() -> str:
-    raise NotImplementedError
+def display_profiles(profile_list: list) -> None:
+    for index, profile in enumerate(profile_list):
+        print(f"{index+1}) {profile[:-5]}")
 
 
 ## get_profile_path
 ## returns string
 ## takes in profile name and returns a created file path
 def get_profile_path(chosen_profile: str) -> str:
-    return os.path.join('./profile', chosen_profile + '.json')
-
-
-## display_profiles()
-## returns none
-## checks the profile directory for files ending in .json
-## and display just the file name
-def display_profiles() -> None:
-    profiles = [p for p in os.listdir('./profile') if p.endswith(".json")]
-    for index, filename in enumerate(profiles, start=1):
-        print(f"{index}) {get_username_from_file(filename)}")
+    if chosen_profile.endswith(".json"):
+        return os.path.join('./profile', chosen_profile)
+    else:
+        return os.path.join('./profile', chosen_profile + '.json')
 
 
 ##

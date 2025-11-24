@@ -1,6 +1,6 @@
 from profile.profile_creator import create_profile
 from profile.profile_manager import profile_selector, load_profile, display_profile_menu
-from utilities.utilities import get_integer_input, get_profile_path, check_profiles_exist, display_profiles
+from utilities.utilities import get_integer_input, get_profile_path, check_profiles_exist
 
 
 ##
@@ -40,7 +40,6 @@ def main_menu(profile: dict) -> None:
     print("==========================")
     print(f"Welcome to Master Calculus, " + profile["name"] + "!")
     print("==========================")
-    print("==========================")
     print("1) Practice")
     print("2) Quiz")
     print("3) Statistics")
@@ -65,7 +64,6 @@ def startup_wizard() -> dict:
     else:
         username = profile_selector()
         return load_profile(username)
-
 
 
 ## main

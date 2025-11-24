@@ -1,6 +1,6 @@
-import json
+import json, os
 
-from utilities.utilities import get_number_of_profiles, get_profile_path, get_date
+from utilities.utilities import get_profile_path, get_date
 
 
 ## get_profile_name()
@@ -24,6 +24,16 @@ def get_profile_name() -> str:
 ## returns the number of profiles
 def get_user_id() -> int:
     return get_number_of_profiles() + 1
+
+
+##
+##
+def get_number_of_profiles() -> int:
+    iterator = 0
+    for file_name in os.listdir("./profile"):
+        if file_name.endswith(".json"):
+            iterator += 1
+    return iterator
 
 
 ## create_profile()
