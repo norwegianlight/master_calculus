@@ -1,4 +1,4 @@
-from utilities.utilities import get_integer_input, get_multiple_integers
+from utilities.utilities import get_integer_input
 
 
 def derivative_practice_module() -> None:

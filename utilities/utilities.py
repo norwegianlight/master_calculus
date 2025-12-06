@@ -15,3 +15,11 @@ def get_profile_path(chosen_profile: str) -> str:
         return os.path.join('./profile', chosen_profile)
     else:
         return os.path.join('./profile', chosen_profile + '.json')
+
+
+def check_profiles_exist() -> bool:
+    files_exist: bool = False
+    for file_name in os.listdir("./profile"):
+        if file_name.endswith(".json"):
+            files_exist = True
+    return files_exist

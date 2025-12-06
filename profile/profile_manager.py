@@ -1,6 +1,6 @@
 import json, os, datetime
 
-from utilities.utilities import get_integer_input, get_profile_path
+from utilities.utilities import get_integer_input, get_profile_path, check_profiles_exist
 
 
 def get_profile_list() -> list:
@@ -80,6 +80,7 @@ def profile_selector() -> str:
     profile_list: list = get_profile_list()
     display_profiles(profile_list)
     print("0) Create new profile")
+
     choice: int = get_integer_input("Choose profile: ")
 
     if choice == 0:
@@ -121,6 +122,7 @@ def rename_profile() -> None:
         json.dump(data, file)
 
 
+TODO: 'Update the user if current profile is deleted'
 def profile_remover() -> None:
     profile_list = get_profile_list()
     display_profiles(profile_list)
@@ -130,9 +132,12 @@ def profile_remover() -> None:
 
     try:
         os.remove(get_profile_path(profile_to_delete))
-        print(f"SUCCESS: Profile |{profile_to_delete}| deleted")
+        print(f"SUCCESS: Profile |{profile_to_delete[:-5]}| deleted")
     except FileNotFoundError:
-        print(f"FAIL: Profile |{profile_to_delete}| does not exist")
+        print(f"FAIL: Profile |{profile_to_delete[:-5]}| does not exist")
+
+    if not check_profiles_exist():
+        profile_selector()
 
 
 def handle_profile_menu_choice(choice: int) -> None:

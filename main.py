@@ -2,26 +2,18 @@ import os
 
 from practice.practice_module import practice_menu
 from profile.profile_manager import create_profile, profile_selector, load_profile, profile_menu
-from utilities.utilities import get_integer_input, get_profile_path
-
-
-def check_profiles_exist() -> bool:
-    files_exist: bool = False
-    for file_name in os.listdir("./profile"):
-        if file_name.endswith(".json"):
-            files_exist = True
-    return files_exist
+from utilities.utilities import get_integer_input, get_profile_path, check_profiles_exist
 
 
 def display_stats(profile: dict) -> None:
-    print(f"{profile['name']}'s stats:")
+    print(f"\n{profile['name']}'s stats:")
     print(f"Profile created: {profile['date_created']}")
     print(f"Quizzes completed: {profile['quizzes_completed']}")
     print(f"Average correct answers: {profile['avg_correct_answers']}")
     print(f"Average quiz time: {profile['avg_quiz_time']}")
     print(f"Best quiz time: {profile['best_quiz_time']}")
 
-    input("Press any key to continue...")
+    input("\nPress any key to continue...\n")
 
 
 def handle_main_menu_choice(choice: int, profile: dict) -> None:
@@ -59,7 +51,7 @@ def new_user() -> dict:
     return load_profile(get_profile_path(username))
 
 
-def startup_wizard() -> dict:
+def start_up_wizard() -> dict:
     if not check_profiles_exist():
         return new_user()
     else:
@@ -68,7 +60,7 @@ def startup_wizard() -> dict:
 
 
 def main() -> None:
-    profile: dict = startup_wizard()
+    profile: dict = start_up_wizard()
 
     while True:
         main_menu(profile)
