@@ -1,14 +1,22 @@
-from utilities.utilities import get_integer_input
+from utilities.utilities import get_integer_input, get_multiple_integers
 
 
-##
-##
+def derivative_practice_module() -> None:
+    print("What would you like to practice?")
+    print("1) Power rule")
+    print("2) Product rule")
+    print("3) Chain rule")
+    print("4) Quotient rule")
+    print("5) All of the above")
+
+
+
 def handle_practice_menu_choice(choice: int) -> None:
-    raise NotImplementedError
+    match choice:
+        case 1:
+            derivative_practice_module()
 
 
-##
-##
 def display_practice_menu() -> None:
     print(f"Practice Module")
     print(f"===============")
@@ -20,8 +28,5 @@ def display_practice_menu() -> None:
     handle_practice_menu_choice(choice)
 
 
-##
-##
 def practice_menu() -> None:
     display_practice_menu()
-

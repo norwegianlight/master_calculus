@@ -1,12 +1,21 @@
-import json
-import os
+import json, os, datetime
 
-from profile.profile_creator import create_profile, get_profile_name
-from utilities.utilities import get_integer_input, get_profile_path, display_profiles, get_profile_list
+from utilities.utilities import get_integer_input, get_profile_path
 
 
-##
-##
+def get_profile_list() -> list:
+    profiles = []
+    for file_name in os.listdir("./profile"):
+        if file_name.endswith(".json"):
+            profiles.append(file_name)
+    return profiles
+
+
+def display_profiles(profile_list: list) -> None:
+    for index, profile in enumerate(profile_list):
+        print(f"{index+1}) {profile[:-5]}")
+
+
 def load_profile(path: str) -> dict:
     try:
         with open(path, "r") as file:
@@ -15,34 +24,87 @@ def load_profile(path: str) -> dict:
         return {}
 
 
-##
-##
+def get_profile_name() -> str:
+    while True:
+        name: str = input("Enter profile name: ").strip()
+        if not name:
+            print("Profile name can not be empty, try again")
+        elif not name.isalpha():
+            print("Profile name can only contain alphabetical characters, try again")
+        elif len(name) > 10:
+            print("Profile name can only contain 10 characters max, try again")
+        elif name.lower() == "default":
+            print("Profile name cannot be 'default', try again")
+        else:
+            return name
+
+
+def get_number_of_profiles() -> int:
+    iterator = 0
+    for file_name in os.listdir("./profile"):
+        if file_name.endswith(".json"):
+            iterator += 1
+    return iterator
+
+
+def create_profile() -> str:
+    profile_name: str = get_profile_name()
+
+    new_profile: str = get_profile_path(profile_name)
+
+    profile_id: int = get_number_of_profiles() + 1
+
+    default_profile = \
+        {
+            "name": profile_name,
+            "date_created": datetime.datetime.now().strftime("%b %-d, %Y"),
+            "user_id": profile_id,
+            "avg_correct_answers": -1.0,
+            "avg_quiz_time": -1.0,
+            "best_quiz_time": -1.0,
+            "quizzes_completed": -1
+        }
+
+    try:
+        with open(new_profile, "x") as new_file:
+            new_file.write(json.dumps(default_profile))
+        print(f"SUCCESS: profile |{profile_name}| has been created")
+
+    except FileExistsError:
+        print(f"FAIL: profile |{profile_name}| already exists")
+
+    return profile_name
+
+
 def profile_selector() -> str:
-    profile_list = get_profile_list()
+    profile_list: list = get_profile_list()
     display_profiles(profile_list)
-    choice = get_integer_input("Choose profile: ")
-    selected_profile = profile_list[choice - 1]
+    print("0) Create new profile")
+    choice: int = get_integer_input("Choose profile: ")
 
-    path = get_profile_path(selected_profile)
-    if not os.path.exists(path):
-        print(f"Profile |{selected_profile}| does not exist")
-        return profile_selector()
+    if choice == 0:
+        path = get_profile_path(create_profile())
+        return path
 
-    return path
+    else:
+        selected_profile = profile_list[choice - 1]
+        path = get_profile_path(selected_profile)
+        if not os.path.exists(path):
+            print(f"Profile |{selected_profile}| does not exist")
+            return profile_selector()
+        return path
 
 
-## edit_profile_name
-## changes profile name
 def rename_profile() -> None:
-    profile_list = get_profile_list()
+    profile_list: list = get_profile_list()
     display_profiles(profile_list)
 
-    choice = get_integer_input("Which profile to rename: ")
+    choice: int = get_integer_input("Which profile to rename: ")
     profile_to_rename = profile_list[choice - 1]
     old_path = get_profile_path(profile_to_rename)
 
-    new_name = get_profile_name()
-    new_path = get_profile_path(new_name)
+    new_name: str = get_profile_name()
+    new_path: str = get_profile_path(new_name)
 
     if os.path.exists(new_path):
         print(f"FAIL: Profile with name |{new_name}| already exists")
@@ -59,8 +121,6 @@ def rename_profile() -> None:
         json.dump(data, file)
 
 
-## profile_remover returns none
-## deletes selected profile
 def profile_remover() -> None:
     profile_list = get_profile_list()
     display_profiles(profile_list)
@@ -75,8 +135,6 @@ def profile_remover() -> None:
         print(f"FAIL: Profile |{profile_to_delete}| does not exist")
 
 
-## handle_profile_menu_choice(choice)
-##
 def handle_profile_menu_choice(choice: int) -> None:
     match choice:
         case 1:
@@ -93,11 +151,12 @@ def handle_profile_menu_choice(choice: int) -> None:
             print("Invalid choice")
 
 
-## display_profile_menu()
-## display menu for user to choose from
 def display_profile_menu() -> None:
     print("====================")
     print("Profile Manager Menu")
+    print("====================")
+    print("Profiles:")
+    display_profiles(get_profile_list())
     print("====================")
     print("1) Create new profile")
     print("2) Switch profile")
@@ -109,7 +168,5 @@ def display_profile_menu() -> None:
     handle_profile_menu_choice(choice)
 
 
-## profile_menu()
-## user creates new profile or selects existing profile
 def profile_menu() -> None:
     display_profile_menu()
